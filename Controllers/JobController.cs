@@ -25,18 +25,23 @@ namespace JobOpeningsTracker.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet]
-        //public IActionResult Index()
-        //{
-        //    return Ok("Hello World");
-        //}
+        [Route("{jobId}")]
+        [HttpGet]
+        public async Task<ActionResult<JobInfoDto>> GetJob(int jobId)
+        {
+            var job = _mapper.Map<JobInfoDto>(await _jobRepository.GetJobAsync(jobId, false));
+            return Ok(job);
+        }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllJobs()
+        public async Task<ActionResult<IEnumerable<JobInfoDto>>> GetAllJobs()
         {
             var jobsEntities = await _jobRepository.GetJobsAsync();
+            ICollection<JobInfoDto> jobsDto = _mapper.Map<ICollection<JobInfoDto>>(jobsEntities);
 
-            return Ok(_mapper.Map<IEnumerable<JobInfoDto>>(jobsEntities));
+            var jobsResponse = new JobResponse(jobsDto); 
+
+            return Ok(jobsResponse);
         }
 
         [HttpPost]

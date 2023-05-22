@@ -51,8 +51,6 @@ namespace JobOpeningsTracker.Services
         public async Task<IEnumerable<JobEntity>> GetJobsAsync()
         {
             return await _jobsContext.Jobs.Include(job => job.JobAplication).ToListAsync();
-
-            //throw new NotImplementedException();
         }
 
         public async Task<byte[]> ConvertResumeToByte(IFormFile resume)
