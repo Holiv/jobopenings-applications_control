@@ -25,16 +25,17 @@ namespace JobOpeningsTracker.Services
         {
             var jobApplication = await GetJobApplicationAsync(jobId, applicationId);
             byte[] resumeToByte = await ConvertResumeToByte(resume);
-            string resumeDownloadPath = GetDownloadPath(jobId, jobApplication);
+            //string resumeDownloadPath = GetDownloadPath(jobId, jobApplication);
 
             jobApplication.FileResume = resumeToByte;
-            jobApplication.UrlResume = resumeDownloadPath;
+            //jobApplication.UrlResume = resumeDownloadPath;
         }
 
         public string GetDownloadPath(int jobId, JobApplicationEntity jobApplication)
         {
             //var applicationId = await GetJobApplicationAsync(jobId);
-            return $"https://localhost/api/{jobId}/applications/{jobApplication.Id}/resume";
+            var urlResume = jobApplication.UrlResume = $"https://localhost:7242/api/{jobId}/applications/{jobApplication.Id}/resume";
+            return urlResume;
         }
 
         public async Task<JobEntity?> GetJobAsync(int jobId, bool includeApplications)

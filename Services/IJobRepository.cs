@@ -13,7 +13,8 @@ namespace JobOpeningsTracker.Services
 		Task AddJobApplicationResume(int jobId, int applicationId, IFormFile resume);
         Task<IEnumerable<JobApplicationEntity>> GetJobApplicationsAsync(int jobId);
 		Task<JobApplicationEntity> GetJobApplicationAsync(int jobId, int JobApplicationId);
-		void RemoveJobApplication(JobApplicationEntity jobApplication);
+		string GetDownloadPath(int jobId, JobApplicationEntity jobApplication);
+        void RemoveJobApplication(JobApplicationEntity jobApplication);
 
         Task SaveChangesAsync();
 		

@@ -32,7 +32,7 @@ namespace JobOpeningsTracker.Controllers
             return Ok(_mapper.Map<IEnumerable<JobApplicationDto>>(jobsEntities));
         }
 
-        [Route("/{applicationId}")]
+        [Route("{applicationId}")]
         [HttpGet]
         public async Task<ActionResult<JobApplicationDto>> GetJobApplication(int jobId, int applicationId)
         {
@@ -40,7 +40,7 @@ namespace JobOpeningsTracker.Controllers
             return Ok(_mapper.Map<JobApplicationDto>(jobEntity));
         }
 
-        [Route("/{applicationId}/resume")]
+        [Route("{applicationId}/resume")]
         [HttpGet]
         public async Task<ActionResult<int>> GetApplicationResume(int jobId, int applicationId)
         {
@@ -48,7 +48,7 @@ namespace JobOpeningsTracker.Controllers
             byte[]? byteFile = job.FileResume;
             string fileType = "application/pdf";
 
-            return File(byteFile, fileType, $"{job.Name}_resume");
+            return File(byteFile, fileType, $"{job.Name}_resume"); 
         }
 
         [HttpPost]
@@ -57,11 +57,15 @@ namespace JobOpeningsTracker.Controllers
             var jobApplicationEntity = _mapper.Map<JobApplicationEntity>(jobApplicationDto);
             await _jobRepository.AddJobApplicationAsync(jobId, jobApplicationEntity);
             await _jobRepository.SaveChangesAsync();
+            _jobRepository.GetDownloadPath(jobId, jobApplicationEntity);
+            await _jobRepository.SaveChangesAsync();
+
+            var createdJobApplication = _mapper.Map<JobApplicationDto>(jobApplicationEntity);
 
             return Ok();
         }
 
-        [Route("/{applicationId}")]
+        [Route("{applicationId}")]
         [HttpPost]
         public async Task<IActionResult> IncludeApplicationResume(int jobId, int applicationId, IFormFile resume)
         {
@@ -71,7 +75,7 @@ namespace JobOpeningsTracker.Controllers
             return Ok();
         }
 
-        [Route("/{applicationId}")]
+        [Route("{applicationId}")]
         [HttpDelete]
         public async Task<ActionResult> DeleteJobApplication(int jobId, int applicationId)
         {

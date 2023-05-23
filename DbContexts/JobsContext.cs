@@ -20,6 +20,13 @@ namespace JobOpeningsTracker.DbContexts
 
 		public DbSet<JobEntity> Jobs { get; set; } = null!;
 		public DbSet<JobApplicationEntity> JobApplication { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.HasPostgresExtension("uuid-ossp");
+        }
     }
 }
 
